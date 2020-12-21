@@ -55,15 +55,25 @@ namespace Cwiczenie4.Controllers
 
                
                 com.Connection = con;
-                com.CommandText =" SELECT Studies.Name, Enrollment.Semester "+
-                 "from Student "+
-                 "inner join Enrollment on Enrollment.IdEnrollment = Student.IdEnrollment "+
-                 "inner join Studies on Enrollment.IdStudy = Studies.IdStudy "+
-                 "WHERE IndexNumber = @index";
+                /*    com.CommandText =" SELECT Studies.Name, Enrollment.Semester ,Enrollment.StartDate "+
+                     "from Student "+
+                     "inner join Enrollment on Enrollment.IdEnrollment = Student.IdEnrollment "+
+                     "inner join Studies on Enrollment.IdStudy = Studies.IdStudy "+
+                     "WHERE IndexNumber = @index";
 
 
 
-                com.Parameters.AddWithValue("index", indexNumber);
+                    com.Parameters.AddWithValue("index", indexNumber); */
+
+                com.CommandText = " SELECT Studies.Name, Enrollment.Semester ,Enrollment.StartDate " +
+                     "from Student " +
+                     "inner join Enrollment on Enrollment.IdEnrollment = Student.IdEnrollment " +
+                     "inner join Studies on Enrollment.IdStudy = Studies.IdStudy " +
+                     "WHERE IndexNumber = '" + indexNumber + " ' " ;
+
+
+
+
                 con.Open();
                 var dr = com.ExecuteReader();
                 if (dr.Read())
@@ -72,8 +82,9 @@ namespace Cwiczenie4.Controllers
 
                     string Name = dr["Name"].ToString();
                     string Semester = dr["Semester"].ToString();
+                    string StartDate = dr["StartDate"].ToString();
 
-                    return Ok("Studies: " +Name +"\nSemester: " +Semester );
+                    return Ok("Studies: " +Name +"\nSemester: " +Semester + "\nStart Date: " + StartDate);
                 }
                     
                     
