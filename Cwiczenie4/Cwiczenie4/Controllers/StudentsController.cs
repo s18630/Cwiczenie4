@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Cwiczenie4.Models;
+using Cwiczenie4.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cwiczenie4.Controllers
@@ -13,9 +14,15 @@ namespace Cwiczenie4.Controllers
     public class StudentsController : ControllerBase
     {
         private const string ConString = "Data Source=db-mssql;Initial Catalog=2019SBD;Integrated Security=True";
+        private IStudentsDal _dbService;
+
+        public StudentsController(IStudentsDal dbService)
+        {
+            _dbService = dbService;
+        }
 
         [HttpGet]
-        public IActionResult GetStudent()
+        public IActionResult GetStudent([FromServices] IStudentsDal dbService)
         {
             var list = new List<Student>();
             using (SqlConnection con = new SqlConnection(ConString))
