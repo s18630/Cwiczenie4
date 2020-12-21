@@ -43,5 +43,54 @@ namespace Cwiczenie4.Controllers
             }
             return Ok(list);
         }
+
+
+        [HttpGet("{IndexNumber}")]
+        public IActionResult GetStudent(string indexNumber)
+        {
+            var list = new List<Student>();
+            using (SqlConnection con = new SqlConnection(ConString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "select * from Student where indexnumber=@index";
+
+                SqlParameter par = new SqlParameter();
+                par.Value = indexNumber;
+                par.ParameterName = "index";
+                com.Parameters.Add(par);
+
+                con.Open();
+                var dr = com.ExecuteReader();
+                if(dr.Read())
+                {
+                    var st = new Student();
+                    st.IndexNumber = dr["IndexNumber"].ToString();
+                    st.FirstName = dr["FirstName"].ToString();
+                    st.LastName = dr["LastName"].ToString();
+                    st.BirthDate = dr["BirthDate"].ToString();
+                    st.IdEnrollment = dr["IdEnrollment"].ToString();
+
+                    return Ok(st);
+
+
+                }
+
+            }
+            return NotFound();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
