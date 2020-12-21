@@ -45,39 +45,45 @@ namespace Cwiczenie4.Controllers
         }
 
 
-        [HttpGet("{IndexNumber}")]
+        [HttpGet("{indexNumber}")]
         public IActionResult GetStudent(string indexNumber)
         {
-            var list = new List<Student>();
+            
             using (SqlConnection con = new SqlConnection(ConString))
             using (SqlCommand com = new SqlCommand())
             {
+
+               
                 com.Connection = con;
-                com.CommandText = "select * from Student where indexnumber=@index";
+                com.CommandText =" SELECT Studies.Name, Enrollment.Semester "+
+                 "from Student "+
+                 "inner join Enrollment on Enrollment.IdEnrollment = Student.IdEnrollment "+
+                 "inner join Studies on Enrollment.IdStudy = Studies.IdStudy "+
+                 "WHERE IndexNumber = @index";
 
-                SqlParameter par = new SqlParameter();
-                par.Value = indexNumber;
-                par.ParameterName = "index";
-                com.Parameters.Add(par);
 
+
+                com.Parameters.AddWithValue("index", indexNumber);
                 con.Open();
                 var dr = com.ExecuteReader();
-                if(dr.Read())
+                if (dr.Read())
                 {
-                    var st = new Student();
-                    st.IndexNumber = dr["IndexNumber"].ToString();
-                    st.FirstName = dr["FirstName"].ToString();
-                    st.LastName = dr["LastName"].ToString();
-                    st.BirthDate = dr["BirthDate"].ToString();
-                    st.IdEnrollment = dr["IdEnrollment"].ToString();
-
-                    return Ok(st);
 
 
+                    string Name = dr["Name"].ToString();
+                    string Semester = dr["Semester"].ToString();
+
+                    return Ok("Studies: " +Name +"\nSemester: " +Semester );
                 }
+                    
+                    
 
-            }
-            return NotFound();
+
+              
+
+            } return NotFound();
+           
+            
         }
 
 
