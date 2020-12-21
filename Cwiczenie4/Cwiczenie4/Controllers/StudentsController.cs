@@ -52,45 +52,25 @@ namespace Cwiczenie4.Controllers
             using (SqlConnection con = new SqlConnection(ConString))
             using (SqlCommand com = new SqlCommand())
             {
-
-               
                 com.Connection = con;
-                /*    com.CommandText =" SELECT Studies.Name, Enrollment.Semester ,Enrollment.StartDate "+
+                com.CommandText =" SELECT Studies.Name, Enrollment.Semester ,Enrollment.StartDate "+
                      "from Student "+
                      "inner join Enrollment on Enrollment.IdEnrollment = Student.IdEnrollment "+
                      "inner join Studies on Enrollment.IdStudy = Studies.IdStudy "+
                      "WHERE IndexNumber = @index";
 
-
-
-                    com.Parameters.AddWithValue("index", indexNumber); */
-
-                com.CommandText = " SELECT Studies.Name, Enrollment.Semester ,Enrollment.StartDate " +
-                     "from Student " +
-                     "inner join Enrollment on Enrollment.IdEnrollment = Student.IdEnrollment " +
-                     "inner join Studies on Enrollment.IdStudy = Studies.IdStudy " +
-                     "WHERE IndexNumber = '" + indexNumber + " ' " ;
-
-
-
-
+                com.Parameters.AddWithValue("index", indexNumber); 
                 con.Open();
+
                 var dr = com.ExecuteReader();
                 if (dr.Read())
                 {
-
-
                     string Name = dr["Name"].ToString();
                     string Semester = dr["Semester"].ToString();
                     string StartDate = dr["StartDate"].ToString();
 
                     return Ok("Studies: " +Name +"\nSemester: " +Semester + "\nStart Date: " + StartDate);
                 }
-                    
-                    
-
-
-              
 
             } return NotFound();
            
